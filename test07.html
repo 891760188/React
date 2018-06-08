@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <!--核心库-->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <!--提供与 DOM 相关的功能-->
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <!--可以将 ES6 代码转为 ES5 代码，这样我们就能在目前不支持 ES6 浏览器上执行 React 代码-->
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+ 			class Clock extends React.Component{
+ 				//构造函数
+ 				constructor(props){
+ 					super(props);
+ 					this.state = {date:new Date()}
+ 				}
+ 				//挂载 生命周期钩子
+ 				componentDidMount() {
+					this.timeId = setInterval(() => this.tick(),1000)
+  			}
+				//卸载 生命周期钩子
+			  componentWillUnmount() {
+					clearInterval(this.timerID);
+			  }
+			  //更新state
+			  tick() {
+			    this.setState({
+			      date: new Date()
+			    });
+			  }
+			  //ui
+ 				render(){
+ 					return (
+ 						 <div>
+				        <h1>Hello, world!</h1>
+				        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+				     </div>
+ 					)
+ 				}
+ 			}
+ 			ReactDOM.render(<Clock/>,document.getElementById('example'))
+ 			/**
+ 			 * 当 <Clock /> 被传入 ReactDOM.render() 时, React 会调用 Clock组件的构造函数。 因为 Clock 要显示的是当前时间，所以它将使用包含当前时间的对象来初始化 this.state 。我们稍后会更新此状态。
+
+然后 React 调用了 Clock 组件的 render() 方法。 React 从该方法返回内容中得到要显示在屏幕上的内容。然后，React 然后更新 DOM 以匹配 Clock 的渲染输出。
+
+当 Clock 输出被插入到 DOM 中时，React 调用 componentDidMount() 生命周期钩子。在该方法中，Clock 组件请求浏览器设置一个定时器来一次调用 tick()。
+
+浏览器会每隔一秒调用一次 tick()方法。在该方法中， Clock 组件通过 setState() 方法并传递一个包含当前时间的对象来安排一个 UI 的更新。通过 setState(), React 得知了组件 state(状态)的变化, 随即再次调用 render() 方法，获取了当前应该显示的内容。 这次，render() 方法中的 this.state.date 的值已经发生了改变， 从而，其输出的内容也随之改变。React 于是据此对 DOM 进行更新。
+
+如果通过其他操作将 Clock 组件从 DOM 中移除了, React 会调用 componentWillUnmount() 生命周期钩子, 所以计时器也会被停止。
+ 			 */
+    </script>
+  </body>
+</html>
